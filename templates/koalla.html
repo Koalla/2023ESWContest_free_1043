@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="playlist">
+    <meta property="og:description" content='#DJ #플레이리스트 #라벨스티커'>
+    <meta property="og:image" content="./image/main.png">
+    <meta property="og:type" content="website">
+    
+    <title>Personal-Color</title>
+    <link rel="stylesheet" href="../static/css/koalla.css">
+    <script src="https://kit.fontawesome.com/d4b61b3d04.js" crossorigin="anonymous"></script>
+    <script>
+        //라즈베리 파이 통신
+        window.addEventListener("load", function () {
+            var url = new String(document.location);
+            ip = (url.split("//"))[1];
+            ip = (ip.split(":"))[0];
+            document.getElementById("broker").value = ip
+        });
+    </script>
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+    <script>
+        Kakao.init('1703959acc4a4e6ad0f22fe3538721ac');
+    </script>
+
+</head>
+<body>
+    <section id="home">
+        <div class="homeBox">
+            <div class="homeTitle">
+                <p id="subTitle">나에게 맞는 컬러를 찾아라!</p>
+                <p id="Title">퍼스널컬러 자가진단</p>
+                <img src="../static/image/home/home_face.png" id="home_face">
+            </div>
+            <div class="ContainerBox">
+                <div class="Container1">
+                    <img src="../static/image/home/home_camera.png" id="home_camera">
+                    <p id="cameraP">해당 서비스는 촬영된 사진을 통해서 퍼스널 컬러를 진단합니다.</p>
+                </div>
+                <div class="Container2">
+                    <img src="../static/image/home/home_color.png" id="home_color">
+                    <p id="colorP">해당 서비스는 측정된 퍼스널 컬러와 어울리는 색을 제공합니다.</p>
+                </div>
+                <div class="Container3">
+                    <img src="../static/image/home/home_makeup.png" id="home_makeup">
+                    <p id="makeupP">해당 서비스는 퍼스널 컬러에 맞는 상품을 추천합니다.</p>
+                </div>
+                <button id="startBtn">START</button>
+                <div class="shareContainer">
+                    <p id="copy" onclick="clip()">링크 복사하기</p>
+                    <p id="copyBar">|</p>
+                    <p id="copy" onclick="shareKakao()">카카오톡 공유하기</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="camera" class="hidden">
+        <div class="cameraBox">
+            <div class="cameraTitleBox">
+                <i class="fa-solid fa-arrow-left fa-xl" id="homeBtn"></i>
+                <p id="cameraTitle">원에 맞춰 카메라를 응시해주세요.</p>
+                <i class="fa-solid fa-camera fa-2xl" id="cameraBtn"></i>
+            </div>
+            <img src="http://192.168.137.165:8080/?action=stream" class="cameraDiv"/>
+            <div class="cameraCircle"></div>
+        </div>
+    </section>
+
+    <section id="cameraShow" class="hidden">
+        <div class="cameraShowBox">
+            <p id="cameraShowTitle">본인의 사진을 확인해주세요.</p>
+            <form>
+            <div class="circle"></div>
+            </form>
+            <div class="checkBtn">
+                <button id="recameraShowBtn">재촬영 하기</button>
+                <button id="qnaBtn">진단 받기</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="qna" class="hidden">
+        <div class="qnaBox">
+        <div class="status mx-auto mt-5">
+            <span style="font-weight:bold; font-size:30px; color:#124098">
+                <div class="qBox kotra mt-3"></div>
+            </span><br>
+            <span style="font-weight:bold; font-size:30px;">
+                <div class="aBox mt-3 kotra answerBtnContainer"></div>
+            </span>
+        </div>
+    </div>
+    </section>
+
+    <section id="result_spring" class="hidden">
+        <div class="homeBox">
+            <div class="resultSpringTitle">
+                <p id="resultName">나의 퍼스털 컬러는</p>
+                <p id="resultKind">봄 웜톤(Spring Warm Tone)</p>
+            </div>
+            <img src="../static/image/result/spring.png" id="result_springPng">
+            <div class="result_spring_div"></div>
+            <p id="intro">
+                <div class="introContainer1">
+                    <p>✅</p>
+                    <p>봄 웜톤의 기본 색은 노란빛을 지닌 색이며, 따뜻한 톤들로 이루어져 있습니다.</p>
+                </div>
+                <div class="introContainer2">
+                    <p>✅</p>
+                    <p>쨍한 비비드 톤의 오렌지, 옐로 계열의 의상을 입으면 얼굴에 생기와 상큼한 느낌을 줄 수 있습니다.</p>
+                </div>
+                <div class="introContainer3">
+                    <p>✅</p>
+                    <p>메이크업에서는 옐로 베이스로 피부를 균일하게 연출할 수 있고, 립 색상은 오렌지나 코랄이 어울립니다. 
+                헤어 역시 노란빛이 도는 골드 브라운, 레드와 오렌지 브라운 계열로 염색하면 더욱 윤기 나는 헤어 스타일이 됩니다.</p>
+                </div>
+            </p>
+            <button id="springBtn">상품 추천 받기</button>
+        </div>
+    </section>
+
+    <section id="result_summer" class="hidden">
+        <div class="homeBox">
+            <div class="resultSpringTitle">
+                <p id="resultName">나의 퍼스털 컬러는</p>
+                <p id="resultKind">여름 쿨톤(Summer Cool Tone)</p>
+            </div>
+            <img src="../static/image/result/summer.png" id="result_springPng">
+            <div class="result_spring_div"></div>
+            <p id="intro">
+                <div class="introContainer1">
+                    <p>✅</p>
+                    <p>여름 쿨톤은 흰색과 파란색을 머금고 있는 소프트하고 밝은 컬러의 톤으로 시원함, 시크함, 세련함의 이미지를 줍니다. </p>
+                </div>
+                <div class="introContainer2">
+                    <p>✅</p>
+                    <p>파스텔톤 셔츠와 스커트, 화이트 린넨이나 쉬폰 등을 매칭하면 좋습니다.</p>
+                </div>
+                <div class="introContainer3">
+                    <p>✅</p>
+                    <p>메이크업의 경우 회갈색이나 로즈베이지 등의 색깔로 진하지 않게 표현하는 것이 포인트입니다. 
+                        립은 베이비 핑크나 로즈 핑크 푸시아 색상을 추천하며, 헤어는 자연갈색과 애쉬브라운 컬러가 좋습니다.</p>
+                </div>
+            </p>
+            <button id="summerBtn">상품 추천 받기</button>
+        </div>
+    </section>  
+    
+    <section id="result_autumn" class="hidden">
+        <div class="homeBox">
+            <div class="resultSpringTitle">
+                <p id="resultName">나의 퍼스털 컬러는</p>
+                <p id="resultKind">가을 웜톤(Fall Warm Tone)</p>
+            </div>
+            <img src="../static/image/result/autumn.png" id="result_springPng">
+            <div class="result_spring_div"></div>
+            <p id="intro">
+                <div class="introContainer1">
+                    <p>✅</p>
+                    <p>가을 웜톤은 부드럽고 지적인 느낌을 풍기며, 그윽한 붉은 계열을 띄고 있습니다. </p>
+                </div>
+                <div class="introContainer2">
+                    <p>✅</p>
+                    <p>카멜, 와인, 브라운 컬러의 의상을 입어주면 고급스러운 가을 분위기를 연출할 수 있다.</p>
+                </div>
+                <div class="introContainer3">
+                    <p>✅</p>
+                    <p>메이크업의 경우 아이메이크업은 차분한 피치부터 코랄, 어두운 고동색까지 다양한 색상의 섀도 활용이 가능합니다. 
+                        립은 누디한 핑크나 오렌지 색상을, 헤어의 경우 골드브라운과 갈색컬러인 미디엄 브라운, 다크 브라운을 추천합니다.</p>
+                </div>
+            </p>
+            <button id="autumnBtn">상품 추천 받기</button>
+        </div>
+    </section>
+
+    <section id="result_winter" class="hidden">
+        <div class="homeBox">
+            <div class="resultSpringTitle">
+                <p id="resultName">나의 퍼스털 컬러는</p>
+                <p id="resultKind">겨울 쿨톤(Winter Cool Tone)</p>
+            </div>
+            <img src="../static/image/result/winter.png" id="result_springPng">
+            <div class="result_spring_div"></div>
+            <p id="intro">
+                <div class="introContainer1">
+                    <p>✅</p>
+                    <p>겨울 쿨톤은 푸른색과 검은색을 바탕의 차갑고 채도가 높은 컬러가 어울립니다.</p>
+                </div>
+                <div class="introContainer2">
+                    <p>✅</p>
+                    <p>푸른빛이 도는 보라색 계열의 옷이나 블랙을 매치하면 도시적이고 세련된 느낌을 연출할 수 있습니다.</p>
+                </div>
+                <div class="introContainer3">
+                    <p>✅</p>
+                    <p>메이크업의 경우 아이 메이크업은 회갈색이나 회보라빛 섀도를 사용해 눈매의 명암만 나타내주는 것이 좋습니다. 
+                        립은 피치 코랄보다는 핫핑크나 버건디 컬러가 잘 어울리며, 푸른빛이 도는 어두운 갈색 머리나 밝은 검정 머리는 이지적인 겨울 쿨톤의 이미지를 극대화해줍니다.</p>
+                </div>
+            </p>
+            <button id="winterBtn">상품 추천 받기</button>
+        </div>
+    </section>
+
+    <section id="re_spring" class="hidden">
+        <div class="springBox">
+            <p id="subTitle">봄 웜톤</p>
+            <p id="Title">추천 화장품</p>
+            <div class="Lip">
+                <p id="LipTitle">립</p>
+                <div class="slideShow" id="slideShow">
+                    <ul class="slides">
+                        <li>
+                            <img src="../static/image/spring/lip/spring_lip1.png">
+                            <p>누즈 케어 립추얼<br>- 02 바이선셋</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/spring/lip/spring_lip2.png">
+                            <p>립 포션 아쿠아 글로우<br>- 03 슈가로즈</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/spring/lip/spring_lip3.png">
+                            <p>립 버터 밤<br>- 비치 베케이</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/spring/lip/spring_lip4.png">
+                            <p>팬텀 볼류마이징 글로시 밤<br>- 슬립</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/spring/lip/spring_lip5.png">
+                            <p>클리오 크리스탈 글램틴트<br>- 06 데일리모브</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/spring/lip/spring_lip6.png">
+                            <p>뮤드 소프트 블러 틴트<br>- 04 하트 워밍</p>
+                        </li>
+                    </ul>
+                    <p class="controller">
+                        <span class="prev">&lang;</span>
+                        <span class="next">&rang;</span>
+                    </p>
+                </div>
+            </div>
+            <div class="Shadow">
+                <p id="ShadowTitle">섀도우</p>
+                <div class="slideShow1" id="slideShow1">
+                    <ul class="slides1">
+                        <li>
+                            <img src="../static/image/spring/shadow/spring_shadow1.png">
+                            <p>웨이크메이크 소프트 블러링 아이팔레트<br>- 03 선셋 블러링</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/spring/shadow/spring_shadow2.png">
+                            <p>데이지크 섀도우 팔레트<br>-18 베리스무디</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/spring/shadow/spring_shadow3.png">
+                            <p>클리오 프로 아이 팔레트<br>- 19 낮잠자는 치즈</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/spring/shadow/spring_shadow4.png">
+                            <p>에스쁘아 리얼 아이 팔레트 올뉴<br>- 에브리베이지</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/spring/shadow/spring_shadow5.png">
+                            <p>페리페라 올테이크 무드 팔레트<br>- 15 형님 저 녀석 튤립 만들까요?</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/spring/shadow/spring_shadow6.png">
+                            <p>홀리카홀리카 마이페이브 무드 아이 팔레트<br>- 쉘 온 더 비치</p>
+                        </li>
+                    </ul>
+                    <p class="controller">
+                        <span class="prev1">&lang;</span>
+                        <span class="next1">&rang;</span>
+                    </p>
+                </div>
+            </div>
+            <div class="Blusher">
+                <p id="BlusherTitle">블러셔</p>
+                <div class="slideShow2" id="slideShow2">
+                    <ul class="slides2">
+                        <li>
+                            <img src="../static/image/spring/blusher/spring_blusher1.png">
+                            <p>치크 팝<br>- 소르베 팝</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/spring/blusher/spring_blusher2.png">
+                            <p>롬앤 베러 댄 치크<br>- C01 피치칩</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/spring/blusher/spring_blusher3.png">
+                            <p>나스 블러쉬<br>- 섹스 어필</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/spring/blusher/spring_blusher4.png">
+                            <p>베네피트 단델리온 블러셔<br>- 단델리온</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/spring/blusher/spring_blusher5.png">
+                            <p>페리페라 맑게 물든 선샤인 치크<br>- 01 집 밖은 위험해</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/spring/blusher/spring_blusher6.png">
+                            <p>뮤드 플러터 블러셔<br>- 03 메리 뮤즈</p>
+                        </li>
+                    </ul>
+                    <p class="controller">
+                        <span class="prev2">&lang;</span>
+                        <span class="next2">&rang;</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="re_summer" class="hidden">
+        <div class="summerBox">
+            <p id="subTitle">여름 쿨톤</p>
+            <p id="Title">추천 화장품</p>
+            <div class="Lip">
+                <p id="LipTitle">립</p>
+                <div class="slideShow" id="slideShow">
+                    <ul class="slides4">
+                        <li>
+                            <img src="../static/image/summer/lip/1.png">
+                            <p>어뮤즈 듀 틴트 <br>- 03호 꽃물</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/summer/lip/2.jfif">
+                            <p>페리페라 잉크무드 매트스틱<br>- 11호 당모쿨핑</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/summer/lip/3.png">
+                            <p>에스쁘아 꾸뛰르 립 틴트 블러 벨벳<br>- 세레나데</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/summer/lip/4.png">
+                            <p>헤라 센슈얼 쉬어 스테인<br>- #431</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/summer/lip/5.png">
+                            <p>클리오 크리스탈 글램틴트<br>- 03 블러쉬드 피치</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/summer/lip/6.png">
+                            <p>슈에무라 라끄슈프림 - 와일드 푸시아</p>
+                        </li>
+                    </ul>
+                    <p class="controller">
+                        <span class="prev">&lang;</span>
+                        <span class="next">&rang;</span>
+                    </p>
+                </div>
+            </div>
+            <div class="Shadow">
+                <p id="ShadowTitle">섀도우</p>
+                <div class="slideShow1" id="slideShow1">
+                    <ul class="slides5">
+                        <li>
+                            <img src="../static/image/summer/shadow/1.png">
+                            <p> 에스쁘아 리얼 아이 팔레트<br>- #4호 모브미</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/summer/shadow/2.png">
+                            <p> 페리페라 올테이크 무드 팔레트<br>-#04 뮤트로운우리를봐로즈로워</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/summer/shadow/3.png">
+                            <p>클리오 프로 아이 팔레트<br>- #9호 보타닉모브</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/summer/shadow/4.png">
+                            <p>루나 톤 크러쉬 아이섀도우 팔레트<br>- 코지 모브</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/summer/shadow/5.png">
+                            <p>데이지크 섀도우 팔레트<br>- 13 쿨 블렌딩</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/summer/shadow/6.png">
+                            <p>홀리카홀리카 마이페이브 아이 섀도우 팔레트<br>- 드리미</p>
+                        </li>
+                    </ul>
+                    <p class="controller">
+                        <span class="prev1">&lang;</span>
+                        <span class="next1">&rang;</span>
+                    </p>
+                </div>
+            </div>
+            <div class="Blusher">
+                <p id="BlusherTitle">블러셔</p>
+                <div class="slideShow2" id="slideShow2">
+                    <ul class="slides6">
+                        <li>
+                            <img src="../static/image/summer/blusher/1.png">
+                            <p>3CE 페이스 블러쉬 스플릿 세컨드<br>- 시티 모브</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/summer/blusher/2.png">
+                            <p>아워글래스 앰비언트 블러쉬<br>- 무드 익스포저</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/summer/blusher/3.png">
+                            <p>치크 팝<br>- 팬지팝</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/summer/blusher/4.png">
+                            <p>앤아더스토리즈 블러셔<br>- 시플리 샌드</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/summer/blusher/5.png">
+                            <p>코스메 데코르테 파우더 블러쉬<br>- 807</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/summer/blusher/6.png">
+                            <p>치크 팝<br>- 발레리나팝</p>
+                        </li>
+                    </ul>
+                    <p class="controller">
+                        <span class="prev2">&lang;</span>
+                        <span class="next2">&rang;</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="re_autumn" class="hidden">
+        <div class="autumnBox">
+            <p id="subTitle">가을 웜톤</p>
+            <p id="Title">추천 화장품</p>
+            <div class="Lip">
+                <p id="LipTitle">립</p>
+                <div class="slideShow" id="slideShow">
+                    <ul class="slides7">
+                        <li>
+                            <img src="../static/image/autumn/lip/autumn_lip1.png">
+                            <p>헤라 센슈얼 파우더 매트 리퀴드<br>- 499 로지스웨이드</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/autumn/lip/autumn_lip2.png">
+                            <p>나스 벨벳 매트 립 펜슬<br>- 돌체 비타</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/autumn/lip/autumn_lip3.png">
+                            <p>맥 파우더 키스 리퀴드 립컬러<br>- 멀 잇 오버</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/autumn/lip/autumn_lip4.png">
+                            <p>롬앤 듀이풀 워터 틴트<br>- 012 캐니언</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/autumn/lip/autumn_lip5.png">
+                            <p>페리페라 잉크무드 매트틴트<br>- 014 칠리립꾸</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/autumn/lip/autumn_lip6.png">
+                            <p>에크멀 플랫 화이트 논-섹션 글로이 틴트<br>- 113 아치 플로우</p>
+                        </li>
+                    </ul>
+                    <p class="controller">
+                        <span class="prev">&lang;</span>
+                        <span class="next">&rang;</span>
+                    </p>
+                </div>
+            </div>
+            <div class="Shadow">
+                <p id="ShadowTitle">섀도우</p>
+                <div class="slideShow1" id="slideShow1">
+                    <ul class="slides8">
+                        <li>
+                            <img src="../static/image/autumn/shadow/autumn_shadow1.png">
+                            <p>삐아 레디 투 웨어 아이 팔레트<br>- 01 누드 블러쉬</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/autumn/shadow/autumn_shadow2.png">
+                            <p>어뮤즈 아이 비건 쉬어 팔레트<br>- 03 쉬어 피치</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/autumn/shadow/autumn_shadow3.png">
+                            <p>롬앤 베어 레이어 팔레트<br>- 01 애프리콧 무드</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/autumn/shadow/autumn_shadow4.png">
+                            <p>릴리바이레드 무드 키보드<br>- 05 웜멤버십</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/autumn/shadow/autumn_shadow5.png">
+                            <p>웨이크메이크 믹스 블러링 아이팔레트<br>- 02 버터카라멜</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/autumn/shadow/autumn_shadow6.png">
+                            <p>무드레시피 멀티 아이 팔레트<br>- 스무더</p>
+                        </li>
+                    </ul>
+                    <p class="controller">
+                        <span class="prev1">&lang;</span>
+                        <span class="next1">&rang;</span>
+                    </p>
+                </div>
+            </div>
+            <div class="Blusher">
+                <p id="BlusherTitle">블러셔</p>
+                <div class="slideShow2" id="slideShow2">
+                    <ul class="slides9">
+                        <li>
+                            <img src="../static/image/autumn/blusher/autumn_blusher1.png">
+                            <p>로라 메르시에 블러쉬 컬러 인퓨전<br>- 진저</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/autumn/blusher/autumn_blusher2.png">
+                            <p>릴리바이레드 러브빔 치크<br>- 05 우아빔</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/autumn/blusher/autumn_blusher3.png">
+                            <p>피브 하이퍼-핏 컬러 세럼<br>- 퓨어핑크</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/autumn/blusher/autumn_blusher4.png">
+                            <p>베리썸 리얼미 워터 컬러 블러셔<br>- 03 피넛</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/autumn/blusher/autumn_blusher5.png">
+                            <p>디어달리아 블루밍 에디션 파라다이스 소프트 드림 블러쉬<br>- 03 플레저</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/autumn/blusher/autumn_blusher6.png">
+                            <p>이넬트리 퍼스널 무드 레이어링 블러셔<br>- 03 트렌치 라떼</p>
+                        </li>
+                    </ul>
+                    <p class="controller">
+                        <span class="prev2">&lang;</span>
+                        <span class="next2">&rang;</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="re_winter" class="hidden">
+        <div class="winterBox">
+            <p id="subTitle">겨울 쿨톤</p>
+            <p id="Title">추천 화장품</p>
+            <div class="Lip">
+                <p id="LipTitle">립</p>
+                <div class="slideShow" id="slideShow">
+                    <ul class="slides10">
+                        <li>
+                            <img src="../static/image/winter/lip/winter_lip1.png">
+                            <p>3CE 블러링 리퀴드 립<br>- 베어베리</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/winter/lip/winter_lip2.png">
+                            <p>롬앤 글래스팅 워터 틴트<br>- 02 레드 드롭</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/winter/lip/winter_lip3.png">
+                            <p>릴리바이레드 로맨틱 라이어 무스 틴트<br>- 06 블루베리 머랭인척</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/winter/lip/winter_lip4.png">
+                            <p>입큰 퍼스널 무드 워터 핏 쉬어 틴트<br>- 08 크림슨 케이크</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/winter/lip/winter_lip5.png">
+                            <p>케이트 립몬스터<br>- 012 루비보우</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/winter/lip/winter_lip6.png">
+                            <p>콰티 더 글라스 타투 틴트<br>- 06 시티모브</p>
+                        </li>
+                    </ul>
+                    <p class="controller">
+                        <span class="prev">&lang;</span>
+                        <span class="next">&rang;</span>
+                    </p>
+                </div>
+            </div>
+            <div class="Shadow">
+                <p id="ShadowTitle">섀도우</p>
+                <div class="slideShow1" id="slideShow1">
+                    <ul class="slides11">
+                        <li>
+                            <img src="../static/image/winter/shadow/winter_shadow1.png">
+                            <p>하킷 홀리몰리 레이어 팔레트<br>- 06 플럼 다이브</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/winter/shadow/winter_shadow2.png">
+                            <p>셀레피트 쎄씰 프로 아이섀도우 팔레트(6구)<br>- NO.427</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/winter/shadow/winter_shadow3.png">
+                            <p>입큰 퍼스널 무드 올 팔레트<br>- 쿨프레스드</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/winter/shadow/winter_shadow4.png">
+                            <p>시코르 스텝업 섀도우 팔레트<br>- 03 프라이빗파티</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/winter/shadow/winter_shadow5.png">
+                            <p>컬러그램 음영 창조 섀도우 팔레트<br>- 02 여주공식</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/winter/shadow/winter_shadow6.png">
+                            <p>3CE 멀티 아이 컬러 팔레트<br>- 버터크림</p>
+                        </li>
+                    </ul>
+                    <p class="controller">
+                        <span class="prev1">&lang;</span>
+                        <span class="next1">&rang;</span>
+                    </p>
+                </div>
+            </div>
+            <div class="Blusher">
+                <p id="BlusherTitle">블러셔</p>
+                <div class="slideShow2" id="slideShow2">
+                    <ul class="slides12">
+                        <li>
+                            <img src="../static/image/winter/blusher/winter_blusher1.png">
+                            <p>맥 미네랄라이즈 블러쉬<br>- 버블즈, 플리즈</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/winter/blusher/winter_blusher2.png">
+                            <p>코드글로컬러 N.무드터치블러셔<br>- 레전더리핑크</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/winter/blusher/winter_blusher3.png">
+                            <p>지방시 뷰티 프리즘 리브르 블러쉬<br>- N1 무슬린 릴라</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/winter/blusher/winter_blusher4.png">
+                            <p>클래오 에어 블러 휩 블러쉬<br>- 05 베리스쿱</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/winter/blusher/winter_blusher5.png">
+                            <p>딘토 올 댓 모먼츠 블러셔<br>- 506 드리미 와일드</p>
+                        </li>
+                        <li>
+                            <img src="../static/image/winter/blusher/winter_blusher6.png">
+                            <p>구찌 뷰티 블러시 드 보떼<br>- 07 트루핑크</p>
+                        </li>
+                    </ul>
+                    <p class="controller">
+                        <span class="prev2">&lang;</span>
+                        <span class="next2">&rang;</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <script src="../static/javascript/animation.js"></script>
+    <script src="../static/javascript/koalla.js"></script>
+    <script src="../static/javascript/color.js"></script>
+    <script src="../static/javascript/data.js"></script>
+    <script src="../static/javascript/share.js"></script>
+</body>
+</html>
